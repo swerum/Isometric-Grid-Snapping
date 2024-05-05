@@ -19,7 +19,7 @@ Finally, you might have a wall that you want to snap to instead of just the floo
 
 ## The Math
 The main complicated math is in GridUtil.FindGridCoordinates(). 
-We Linear Algebra to split up the Vector from the origin to the given position into some combination of the x and y axis vectors. You can imagine the screen to be a plane defined by the two vectors: v for the vertical Axis and h for the horizontal axis. Every point on this plane must be some combination of those two vectors, such that 
+We use Linear Algebra to split the Vector from the origin to the given position up into some combination of the x and y axis vectors. You can imagine the screen to be a plane defined by the two vectors: v for the vertical Axis and h for the horizontal axis. Every point on this plane must be some combination of those two vectors, such that 
 $`P = s * v + t * h `$ where s and t are some (as yet unknown) rational numbers (floats). In the below drawing, for example, $`s = 1, t = 3`$, so $`P = 1 * v + 3 * h`$
 
 ![Image of hand-drawn Example Grid](Readme%20Images/Vectors.png)
