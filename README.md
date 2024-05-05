@@ -5,20 +5,23 @@ As input it takes
 - Vector2 horizontalAxis: what direction does your x-axis go and how large is the tile in the x direction
 - Vector2 verticalAxis: what direction does your y-axis go and how large is the tile in the y direction
 - Vector2Int gridSize: how many tiles are there in each direction
+![Image of Editor Input](Readme%20Images/Editor.png)
 
+## Examples
 Normal grids have an x-axis that goes right and a y axis that goes up, so horizontalAxis = (1,0) and verticalAxis = (0,1)
-
+![Image of Generated Regular Grid](Readme%20Images/Normal%20Grid.png)
 
 However, you want your grid to be angled, for example when looking at it with perspective. The most common example of this is an isometric grid - often used in indie games. Here the axes might be: horizontalAxis = (1, 0.6f) and verticalAxis = (1, -0.6f)
-
+![Image of Generated Isometric Grid](Readme%20Images/isometric.png)
 
 Finally, you might have a wall that you want to snap to instead of just the floor. here you might have the axes: horizontalAxis = (0.7f, -0.4f) and verticalAxis = (0,1)
-
+![Image of Generated Slanted Grid](Readme%20Images/Wall%20Perspective.png)
 
 ## The Math
 The main complicated math is in GridUtil.FindGridCoordinates(). Here I am using Linear Algebra to split up the Vector from the origin to the given position into some combination of the x and y axis vectors. You can imagine the screen to be a plane defined by the two vectors: v for the vertical Axis and h for the horizontal axis. Every point on this plane must be some combination of those two, such that 
 $`P = s * v + t * h `$ where s and t are rational numbers (floats). In the below example, $`P = 1 * v + 3 * h`$
 
+![Image of hand-drawn Example Grid](Readme%20Images/Vectors.png)
 
 Once we know what s and t are, we just have to round them to the nearest integer in order to snap them to the grid. 
 
