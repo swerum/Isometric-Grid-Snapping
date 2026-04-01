@@ -1,21 +1,33 @@
 using UnityEngine;
 
-public class GridUtil
+public class GridUtil : MonoBehaviour
 {
-    Vector3 horizontalAxis;
-    Vector3 verticalAxis;
-    Vector3 origin;
-    Vector2 gridSize;
+    [Header("Grid Settings")]
+    [SerializeField] GameObject linePrefab;
+    [SerializeField] Vector3 horizontalAxis;
+    [SerializeField] Vector3 verticalAxis;
+    [SerializeField] Vector3 origin;
+    [SerializeField] Vector2 gridSize;
 
-    public GridUtil(Vector2 horizontal, Vector2 vertical, Vector2 origin, Vector2 gridSize) {
-        horizontalAxis =    new Vector3(horizontal.x, horizontal.y, 0);
-        verticalAxis =      new Vector3(vertical.x, vertical.y, 0);
-        //origin is the 
-        this.origin =       new Vector3(origin.x, origin.y, 0);
-        this.gridSize = gridSize;
+    private void Start() {
+        CreateLineGrid();
     }
 
-    public void CreateLineGrid(GameObject linePrefab, Transform lineParent) {
+    public Vector3 SnapToGrid(Vector3 pos) {
+        Vector2 gridCoords = FindGridCoordinates(pos);
+        Vector3 newPos = gridCoords.x * horizontalAxis + gridCoords.y * verticalAxis;
+        return newPos + origin;
+    }
+
+    public bool IsOnGrid(Vector3 pos) {
+        Vector2 gridCoords = FindGridCoordinates(pos);
+        if (gridCoords.x < 0  || gridCoords.x >= gridSize.x) return false;
+        if (gridCoords.y < 0  || gridCoords.y >= gridSize.y) return false;
+        return true;
+    }
+
+    // ------------------ PRIVATE FUNCTIONS  ------------------
+    private void CreateLineGrid() {
         Vector3 outlineOrigin = origin - 0.5f * horizontalAxis - 0.5f * verticalAxis;
         for (int i = 0; i <= gridSize.x; i++)
         {
@@ -30,25 +42,11 @@ public class GridUtil
             CreateLine(startPoint, endPoint);
         }
 
-
         void CreateLine(Vector3 startPoint, Vector3 endPoint) {
-            GameObject line = GameObject.Instantiate(linePrefab, lineParent);
+            GameObject line = Instantiate(linePrefab, transform);
             LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
             lineRenderer.SetPositions(new Vector3[2] { startPoint, endPoint}); 
         }
-    }
-
-    public Vector3 SnapToGrid(Vector3 pos) {
-        Vector2 gridCoords = FindGridCoordinates(pos);
-        Vector3 newPos = gridCoords.x * horizontalAxis + gridCoords.y * verticalAxis;
-        return newPos + origin;
-    }
-
-    public bool IsOnGrid(Vector3 pos) {
-        Vector2 gridCoords = FindGridCoordinates(pos);
-        if (gridCoords.x < 0  || gridCoords.x >= gridSize.x) return false;
-        if (gridCoords.y < 0  || gridCoords.y >= gridSize.y) return false;
-        return true;
     }
 
     private Vector2Int FindGridCoordinates(Vector3 pos) {
